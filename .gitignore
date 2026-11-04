@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+RSNA-pneumonia-dataset/
+federations/
+runs/
+metadata/
+external/
+*.pt
+*.pth
+*.ckpt
+*.dcm
+*.jpg
+.ipynb_checkpoints/
