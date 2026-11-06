@@ -1,17 +1,10 @@
 # Reliability-Aware Federated Learning for Shortcut-Robust Pneumonia Detection in Chest X-rays
 
-> Capstone project, B.M.S. College of Engineering (BMSCE), Bengaluru
-> **Team:** Arpita Patel · Anshika Agrawal · Anvita A Dali · Asritha Sriram
-> **Guide:** Dr. Sheela S V
 
 A benchmark and black-box audit of **shortcut learning in federated chest X-ray models**. We build a controlled
 four-hospital federation from real RSNA images in which two hospitals carry a *real-image* shortcut (view position
 or patient sex is correlated with the label), measure how much that hurts the global model, and test a
 **reliability-aware aggregation** that down-weights clients whose models rely on the shortcut.
-
-> **Framing.** This is an audit / benchmark / trade-off study, not a claim of state-of-the-art accuracy. We do not
-> claim to beat fairness-weighted baselines such as q-FFL in general (see [Results](#results) and
-> [Limitations](#limitations)).
 
 ---
 
@@ -240,4 +233,3 @@ aggregate). A **local epoch** is one pass over a client's own training data insi
 * RSNA Pneumonia Detection Challenge data, obtained from the RSNA website; cue metadata from NIH ChestX-ray14.
   Follow the original data-use terms; the data is **not** redistributed here.
 * DenseNet-121 with ImageNet pre-training (torchvision).
-* Guide: Dr. Sheela S V, BMSCE.
