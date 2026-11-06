@@ -1,0 +1,24 @@
+# E0 - PILOT / GO-NO-GO (plan section 9).
+#
+# Purpose: before spending compute on the full grid, confirm the planted
+# shortcut actually bites.  We train plain FedAvg on the default roster
+# (H2 view-cue + H4 sex-cue biased at c=0.90) and check that the global model
+# scores well at home (test_id / test_balanced) but DROPS sharply on
+# test_flipped.  A large positive `flip_drop` is the go signal; a near-zero
+# drop means the federation is not shortcut-prone and the roster needs work.
+#
+# Cost: 1 method x 3 seeds x 15 rounds = 3 runs.  TIME ONE ROUND FIRST
+# (plan section 14 "Compute") - multiply by rounds x runs before launching.
+
+exp_name: E0_pilot
+
+federation:
+  name: pilot      # federations/pilot/ (+ pilot_dev/) built if missing
+  coupling: 0.90   # strong cue-label coupling in the biased hospitals
+  m: 2             # keep both biased hospitals (H2_viewcue, H4_democue)
+  seed: 2026
+
+methods: [fedavg]
+seeds: [1, 2, 3]
+rounds: 15
+protocol: P1

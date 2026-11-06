@@ -1,0 +1,34 @@
+# E9 - SECOND INDEPENDENT FEDERATION DRAW (the one last experiment).
+#
+# Purpose: every result in the paper currently comes from ONE federation draw
+# (split seed 2026). This repeats the key comparison on a different patient
+# split, so the q-FFL vs reliability result is not an accident of one split.
+# Also brings q-FFL to 5 seeds (it has 3 in the main run).
+#
+# Same roster, coupling and protocol as E1_main. ONLY federation.seed changes
+# (and the federation name, so it does not overwrite the main federation).
+#
+# Methods: the four that carry the paper's claims.
+#   fedavg        baseline
+#   qffl          the performance-aware baseline that ties you
+#   oracle_drop   ceiling
+#   reliability   gamma = default (2).  Run gamma = 8 the same way you ran
+#                 rel_g8 in E6_ablations (copy its override line here).
+#
+# Cost: 4 methods x 5 seeds x 20 rounds = 20 runs (+5 for gamma 8).
+# Use the SAME seeds and rounds as the main table so the two draws are comparable.
+
+exp_name: E9_second_federation
+
+federation:
+  name: main_draw2
+  coupling: 0.90
+  m: 2
+  seed: 2027          # <- the only substantive change vs E1_main (2026)
+
+methods:
+  - reliability
+
+seeds: [5]
+rounds: 20
+protocol: P1

@@ -1,0 +1,28 @@
+# E3 - DO-NO-HARM / FALSE-POSITIVE CONTROL (plan section 9).
+#
+# Purpose: a safety check.  When NO hospital is biased (m=0, every eval cue
+# balanced at c=0.5), the reliability method must not penalise anyone or
+# degrade accuracy relative to fedavg.  We compare fedavg vs reliability on a
+# clean federation.  Success = the two are statistically indistinguishable on
+# the primary endpoint (small, non-significant Wilcoxon difference) and the
+# reliability scores do not spuriously flag clean clients (inspect the per-run
+# client_signals.csv / detection false-positive behaviour).
+#
+# With m=0 there are no biased clients, so detection_auroc is undefined (NaN) by
+# construction - that is expected here; the point of E3 is the accuracy parity,
+# not detection.
+#
+# Cost: 2 methods x 5 seeds x 18 rounds = 10 runs.  TIME ONE ROUND FIRST
+# (plan section 14 "Compute").
+
+exp_name: E3_do_no_harm
+
+federation:
+  name: clean      # federations/clean/ (+ clean_dev/)
+  m: 0             # no biased hospital; all eval cues balanced
+  seed: 2026
+
+methods: [fedavg, reliability]
+seeds: [1, 2, 3, 4, 5]
+rounds: 18
+protocol: P1

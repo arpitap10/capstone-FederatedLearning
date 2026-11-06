@@ -1,0 +1,34 @@
+# E2 - COUPLING SWEEP (plan section 9: dose-response).
+#
+# Purpose: show the method tracks the *strength* of the shortcut.  We rebuild
+# the federation at three coupling levels c in {0.6, 0.8, 0.95} and run the key
+# contrasts at each: fedavg (harmed baseline), reliability (proposed),
+# oracle_drop (ceiling).  Expect the fedavg->reliability robustness gain to grow
+# with c, and the detection AUROC / Spearman(r, coupling) to strengthen with c.
+#
+# Each sweep arm gets its OWN federation (the draw changes with coupling); the
+# driver appends the arm name as a suffix -> federations/main_c060, main_c080,
+# main_c095 (each with a _dev twin), built once and reused.
+#
+# Cost: 3 arms x 3 methods x 5 seeds x 18 rounds = 45 runs (plus 3 federation
+# builds).  TIME ONE ROUND FIRST (plan section 14 "Compute").
+
+exp_name: E2_coupling_sweep
+
+federation:
+  name: main       # base name; each arm derives main_<arm>
+  m: 2
+  seed: 2026
+
+methods: [fedavg, reliability, oracle_drop]
+seeds: [1, 2, 3, 4, 5]
+rounds: 18
+protocol: P1
+
+sweeps:
+  - name: c060
+    federation: {coupling: 0.60}
+  - name: c080
+    federation: {coupling: 0.80}
+  - name: c095
+    federation: {coupling: 0.95}

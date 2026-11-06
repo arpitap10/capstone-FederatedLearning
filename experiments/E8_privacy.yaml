@@ -1,0 +1,41 @@
+# E8 - PRIVACY / DIFFERENTIAL-PRIVACY ROBUSTNESS (plan section 7.3 + 9).
+#
+# Purpose: show the reliability method degrades gracefully as privacy noise is
+# added, under protocol P1.  Two noise channels are swept:
+#   score_dp_sigma    - Gaussian noise on the released scalar audit scores
+#                       (does noise on r blunt detection / weighting?)
+#   update_clip_C + update_dp_sigma - L2 clipping of each client update plus
+#                       Gaussian noise on the aggregated update sum (record /
+#                       update-level DP).  Noise is only added when a clip C is
+#                       set, so these two are swept as PAIRS.
+#
+# The arms below cross a 'no privacy noise' control with score-DP-only and
+# update-DP-only settings so each channel's effect is attributable.
+#
+# Cost: 5 arms x 1 method x 3 seeds x 18 rounds = 15 runs.  TIME ONE ROUND FIRST
+# (plan section 14 "Compute").
+
+exp_name: E8_privacy
+
+federation:
+  name: main
+  coupling: 0.90
+  m: 2
+  seed: 2026
+
+methods: [reliability]
+seeds: [1, 2, 3]
+rounds: 18
+protocol: P1
+
+sweeps:
+  - name: none            # control: no DP noise
+    overrides: {privacy: {score_dp_sigma: 0.0}}
+  - name: score_sig05     # score-DP only, moderate
+    overrides: {privacy: {score_dp_sigma: 0.5}}
+  - name: score_sig10     # score-DP only, strong
+    overrides: {privacy: {score_dp_sigma: 1.0}}
+  - name: update_c1_sig05 # update-DP: clip C=1.0, sigma=0.5
+    overrides: {privacy: {update_clip_C: 1.0, update_dp_sigma: 0.5}}
+  - name: update_c1_sig10 # update-DP: clip C=1.0, sigma=1.0
+    overrides: {privacy: {update_clip_C: 1.0, update_dp_sigma: 1.0}}

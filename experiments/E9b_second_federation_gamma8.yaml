@@ -1,0 +1,22 @@
+# E9b - gamma = 8 on the SAME second federation as E9 (reliability only).
+# Run E9 first: it builds the federation "main_draw2". This file reuses it.
+# Only the reliability method reads gamma, so the other methods are not repeated.
+
+exp_name: E9b_second_federation_gamma8
+
+federation:
+  name: main_draw2
+  coupling: 0.90
+  m: 2
+  seed: 2027
+
+methods:
+  - reliability
+
+seeds: [1]
+rounds: 20
+protocol: P1
+
+overrides:
+  reliability:
+    gamma: 8.0

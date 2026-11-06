@@ -1,0 +1,51 @@
+# E6 - ABLATIONS (plan section 9: what makes the method work).
+#
+# Purpose: isolate the contribution of (a) the aggregation sharpness gamma and
+# (b) each fused audit signal.  Reliability only; every arm uses the same main
+# federation, so arms differ purely in the reliability config.
+#
+# gamma sweep: weight is w_i ~ n_i * max(r_i, r_min)^gamma.
+#   gamma=0  -> reliability scores ignored (collapses toward FedAvg weighting);
+#   gamma=1,2,4 -> increasingly aggressive down-weighting of low-r clients.
+#
+# signal knock-outs: the fused r is a geometric mean of signals with exponents
+# w_leak / w_gap / w_ctx / w_tau; setting one to 0 removes that signal while
+# keeping the others at their defaults.  (w_tau is the P2 transfer signal and is
+# inactive under P1 anyway; its knock-out arm is a no-op control under P1 and
+# only bites once this spec is re-run with protocol: P2.)
+#
+# Cost: 8 arms x 1 method x 5 seeds x 18 rounds = 40 runs.  TIME ONE ROUND FIRST
+# (plan section 14 "Compute").
+
+exp_name: E6_ablations
+
+federation:
+  name: main
+  coupling: 0.90
+  m: 2
+  seed: 2026
+
+methods: [reliability]
+seeds: [1, 2, 3, 4, 5]
+rounds: 18
+protocol: P1
+
+sweeps:
+  # --- aggregation sharpness ---
+  - name: gamma0
+    overrides: {reliability: {gamma: 0}}
+  - name: gamma1
+    overrides: {reliability: {gamma: 1}}
+  - name: gamma2          # default
+    overrides: {reliability: {gamma: 2}}
+  - name: gamma4
+    overrides: {reliability: {gamma: 4}}
+  # --- per-signal knock-outs (one signal disabled at a time) ---
+  - name: no_leak
+    overrides: {reliability: {w_leak: 0}}
+  - name: no_gap
+    overrides: {reliability: {w_gap: 0}}
+  - name: no_ctx
+    overrides: {reliability: {w_ctx: 0}}
+  - name: no_tau
+    overrides: {reliability: {w_tau: 0}}

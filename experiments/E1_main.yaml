@@ -1,0 +1,46 @@
+# E1 - MAIN COMPARISON (plan section 9, the headline table).
+#
+# Purpose: the central result.  All eight aggregation methods on the same
+# default roster (two biased hospitals at c=0.90), under privacy protocol P1
+# (secure-aggregated updates; scalar reliability scores released per round).
+#
+# Endpoints produced by run_experiments:
+#   primary   : test_balanced worst-group AUROC  (robustness to the cue)
+#   secondary : test_flipped AUROC, flip_drop, detection AUROC
+# plus a Wilcoxon signed-rank test of every method against fedavg (the driver
+# uses 'fedavg' as the fixed baseline), Holm-Bonferroni corrected.
+#
+# Methods:
+#   fedavg            standard baseline (the thing we must beat)
+#   fedprox           proximal baseline (driver sets fedprox_mu=0.1)
+#   valperf/fedar/qffl performance- and fairness-weighted baselines
+#   update_agreement  robust-aggregation baseline (sign-agreement mask)
+#   oracle_drop       upper bound: drops the truly-biased clients (uses ground
+#                     truth; not a deployable method, a ceiling)
+#   reliability       the proposed audit-weighted aggregation
+#
+# Cost: 8 methods x 10 seeds x 20 rounds = 160 runs.  This is the expensive one.
+# TIME ONE ROUND FIRST (plan section 14 "Compute"); consider seeds: [1..5] for a
+# first pass and extend to 10 once a round's wall-clock is known.
+
+exp_name: E1_main
+
+federation:
+  name: main
+  coupling: 0.90
+  m: 2
+  seed: 2026
+
+methods:
+  - fedavg
+  - fedprox
+  - valperf
+  - fedar
+  - qffl
+  - update_agreement
+  - oracle_drop
+  - reliability
+
+seeds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+rounds: 20
+protocol: P1
